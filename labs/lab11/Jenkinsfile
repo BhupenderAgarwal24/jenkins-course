@@ -13,4 +13,11 @@ node('small') {
         junit '**/target/surefire-reports/TEST-*.xml'
         jacoco buildOverBuild: true, deltaBranchCoverage: '80', deltaClassCoverage: '80', deltaComplexityCoverage: '80', deltaInstructionCoverage: '80', deltaLineCoverage: '80', deltaMethodCoverage: '80'
     }
+    
+    stage('Deploy') {
+        sh "mvn clean package -f ${app}"
+
+        // Archive the package
+        archiveArtifacts allowEmptyArchive: true, artifacts: "${app}/target/*.jar", followSymlinks: false
+    }
 }
